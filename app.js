@@ -12,22 +12,73 @@ const NGANH_CFG = {
 
 const TOE_MAX_DISPLAY = 50000; // để tính % thanh bar (clip outlier hàng không)
 
-// ── KHỞI TẠO BẢN ĐỒ ──────────────────────────────────────────────────────────
+// ── KHỞI TẠO BẢN ĐỒ ───────────────────────────────────────────────
 const map = L.map("map", {
   center: [21.02, 105.85],
-  zoom: 11,
+  zoom: 9,
   zoomControl: false,
+
+  minZoom: 9,
+  maxZoom: 15,
+
+  maxBounds: [
+    [20.5, 105.3],   // góc Tây Nam
+    [21.5, 106.1]    // góc Đông Bắc
+  ],
+
+  maxBoundsViscosity: 1.0
 });
 
-L.control.zoom({ position: "bottomright" }).addTo(map);
+L.control.zoom({ 
+  position: "bottomright" 
+}).addTo(map);
 
-// Nền tối CartoDB
-L.tileLayer(
+
+// ── CÁC LỚP NỀN ───────────────────────────────────────────────────
+
+// Ảnh vệ tinh Google
+const satellite = L.tileLayer(
   "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
   {
     maxZoom: 20,
     attribution: "Google Satellite"
-  }).addTo(map);
+  }
+);
+
+// Nền tối Carto
+const dark = L.tileLayer(
+  "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+  {
+    maxZoom: 20,
+    attribution: "CartoDB Dark"
+  }
+);
+
+// Nền OSM (nếu muốn thêm)
+const osm = L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution: "OpenStreetMap"
+  }
+);
+
+// ── LỚP MẶC ĐỊNH ──────────────────────────────────────────────────
+dark.addTo(map);
+
+
+// ── BỘ CHỌN BẢN ĐỒ ───────────────────────────────────────────────
+const baseMaps = {
+  "🛰️ Ảnh vệ tinh": satellite,
+  "🌙 Bản đồ tối": dark,
+  "🗺️ OpenStreetMap": osm
+};
+
+L.control.layers(baseMaps, null, {
+  position: "topright"
+}).addTo(map);
+
+
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let allFeatures = [];       // KNK features gốc
