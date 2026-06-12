@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebGIS – Cơ Sở Kiểm Kê Năng Lượng Hà Nội</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Style riêng -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══ HEADER ══════════════════════════════════════════ -->
+  <div id="header">
+    <div class="logo">🗺️</div>
+    <div class="title-block">
+      <div class="main-title">WebGIS — Cơ Sở Kiểm Kê Năng Lượng</div>
+      <div class="sub-title">Thành phố Hà Nội</div>
+    </div>
+    <div class="header-right">
+      <!-- <span class="badge badge-live">● Dữ liệu thực</span> -->
+      <!-- <span class="badge badge-count" id="badge-count">— cơ sở</span> -->
+    </div>
+  </div>
+
+  <!-- ══ MAIN ════════════════════════════════════════════ -->
+  <div id="main">
+
+    <!-- ── SIDEBAR ──────────────────────────────────────── -->
+    <div id="sidebar">
+
+      <!-- Tìm kiếm -->
+      <div class="sb-section">
+        <div class="sb-label">Tìm kiếm</div>
+        <div class="search-wrap">
+          <span class="ic">🔍</span>
+          <input type="text" id="search-input" placeholder="Tên cơ sở" />
+        </div>
+      </div>
+
+      <!-- Lớp bản đồ -->
+      <div class="sb-section">
+        <div class="sb-label">Lớp bản đồ</div>
+        <div class="layer-row" onclick="toggleLayer('polygon')">
+          <div class="toggle-sw on" id="toggle-polygon"></div>
+          <div class="layer-swatch" style="background:#2a7fd4"></div>
+          <span class="layer-name">Ranh giới xã / phường</span>
+        </div>
+        <div class="layer-row" onclick="toggleLayer('points')">
+          <div class="toggle-sw on" id="toggle-points"></div>
+          <div class="layer-swatch circle" style="background:#f59e0b"></div>
+          <span class="layer-name">Cơ sở kiểm kê năng lượng</span>
+        </div>
+      </div>
+
+      <!-- Phân loại ngành -->
+      <div class="sb-section">
+        <div class="sb-label">Phân loại theo ngành</div>
+        <div class="legend-grid" style="margin-bottom:10px">
+          <div class="legend-item" data-nganh="Ngành công thương">
+            <div class="legend-dot" style="background:#f59e0b"></div>
+            <span class="legend-text">Công thương</span>
+            <span class="legend-count">—</span>
+          </div>
+          <div class="legend-item" data-nganh="Ngành GTVT">
+            <div class="legend-dot" style="background:#3b82f6"></div>
+            <span class="legend-text">GTVT</span>
+            <span class="legend-count">—</span>
+          </div>
+          <div class="legend-item" data-nganh="Ngành xây dựng">
+            <div class="legend-dot" style="background:#8b5cf6"></div>
+            <span class="legend-text">Xây dựng</span>
+            <span class="legend-count">—</span>
+          </div>
+          <div class="legend-item" data-nganh="Ngành TN&MT">
+            <div class="legend-dot" style="background:#10b981"></div>
+            <span class="legend-text">TN&MT</span>
+            <span class="legend-count">—</span>
+          </div>
+        </div>
+
+        <!-- Filter chips -->
+        <div class="filter-chips">
+          <div class="chip active" data-nganh="all">Tất cả</div>
+          <div class="chip" data-nganh="Ngành công thương">Công thương</div>
+          <div class="chip" data-nganh="Ngành GTVT">GTVT</div>
+          <div class="chip" data-nganh="Ngành xây dựng">Xây dựng</div>
+          <div class="chip" data-nganh="Ngành TN&MT">TN&MT</div>
+        </div>
+      </div>
+
+      <!-- Thống kê nhanh -->
+      <div class="sb-section">
+        <div class="sb-label">Thống kê</div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-num" id="stat-total">—</div>
+            <div class="stat-lbl">Cơ sở</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="stat-toe" style="color:#f59e0b">—</div>
+            <div class="stat-lbl">Tổng TOE</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" style="color:#8b5cf6">4</div>
+            <div class="stat-lbl">Ngành</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danh sách điểm -->
+      <div class="sb-section" style="border-bottom:none;padding-bottom:6px;flex-shrink:0">
+        <div class="sb-label">Danh sách cơ sở</div>
+      </div>
+      <div id="points-list"></div>
+
+    </div><!-- /sidebar -->
+
+    <!-- ── BẢN ĐỒ ────────────────────────────────────────── -->
+    <div id="map"></div>
+
+  </div><!-- /main -->
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Logic bản đồ -->
+  <script src="app.js"></script>
+
+</body>
+</html>
