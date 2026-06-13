@@ -34,6 +34,38 @@
   --transition: 0.18s ease;
 }
 
+/* ── LIGHT THEME ───────────────────────── */
+body.light {
+  --bg-deep:    #f5f7fb;
+  --bg-panel:   #ffffff;
+  --bg-card:    #ffffff;
+  --bg-hover:   #eef4fb;
+
+  --border:     #d6dde8;
+  --border-lt:  #c5d2e3;
+
+  --text-main:  #1f2937;
+  --text-sub:   #64748b;
+  --text-dim:   #94a3b8;
+
+  --accent-blue:  #2563eb;
+  --accent-green: #059669;
+  --accent-teal:  #0d9488;
+}
+
+#theme-btn {
+  width:32px;
+  height:32px;
+
+  border:none;
+  border-radius:8px;
+
+  background:var(--bg-card);
+  color:var(--text-main);
+
+  cursor:pointer;
+}
+
 body {
   font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
   background: var(--bg-deep);
@@ -58,12 +90,17 @@ body {
 }
 
 #header .logo {
-  width: 34px; height: 34px;
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
-  border-radius: var(--radius-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 17px;
-  flex-shrink: 0;
+  width: 45px;
+  height: 45px;
+
+  background: none;     /* nền trắng */
+  border-radius: 10px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden;
 }
 
 #header .title-block .main-title {
@@ -503,4 +540,12 @@ body {
 @media (max-width: 768px) {
   :root { --sidebar-w: 260px; }
   .legend-grid { grid-template-columns: 1fr; }
+}
+
+/* khung logo */
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }

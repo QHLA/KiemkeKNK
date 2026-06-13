@@ -22,8 +22,8 @@ const map = L.map("map", {
   maxZoom: 15,
 
   maxBounds: [
-    [20.5, 105.3],   // góc Tây Nam
-    [21.5, 106.1]    // góc Đông Bắc
+    [19.657407, 104.084877],   // góc Tây Nam
+    [22.806574, 106.831159]    // góc Đông Bắc
   ],
 
   maxBoundsViscosity: 1.0
@@ -36,15 +36,6 @@ L.control.zoom({
 
 // ── CÁC LỚP NỀN ───────────────────────────────────────────────────
 
-// Ảnh vệ tinh Google
-const satellite = L.tileLayer(
-  "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
-  {
-    maxZoom: 20,
-    attribution: "Google Satellite"
-  }
-);
-
 // Nền tối Carto
 const dark = L.tileLayer(
   "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
@@ -53,7 +44,14 @@ const dark = L.tileLayer(
     attribution: "CartoDB Dark"
   }
 );
-
+// Ảnh vệ tinh Google
+const satellite = L.tileLayer(
+  "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+  {
+    maxZoom: 20,
+    attribution: "Google Satellite"
+  }
+);
 // Nền OSM (nếu muốn thêm)
 const osm = L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -69,8 +67,8 @@ dark.addTo(map);
 
 // ── BỘ CHỌN BẢN ĐỒ ───────────────────────────────────────────────
 const baseMaps = {
+  "🌙 Bản đồ nền": dark,
   "🛰️ Ảnh vệ tinh": satellite,
-  "🌙 Bản đồ tối": dark,
   "🗺️ OpenStreetMap": osm
 };
 
@@ -78,7 +76,21 @@ L.control.layers(baseMaps, null, {
   position: "topright"
 }).addTo(map);
 
+// ── BỘ CHỌN BACKGROUND ───────────────────────────────────────────────
+const btn = document.getElementById("theme-btn");
 
+btn.onclick = function(){
+
+  document.body.classList.toggle("light");
+
+  if(document.body.classList.contains("light")){
+    btn.innerHTML="🌙";
+  }
+  else{
+    btn.innerHTML="☀️";
+  }
+
+};
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let allFeatures = [];       // KNK features gốc
@@ -182,12 +194,12 @@ function buildPopup(feat) {
     </div>
     <div class="popup-body">
       <div class="popup-row">
-        <span class="ic">📍</span>
+        <span class="ic"> 📍 </span>
         <span class="val">${p.Diachi || "—"}</span>
       </div>
       <div class="popup-row">
         <span class="ic">🔧</span>
-        <span class="lbl">Ngành nghề:&nbsp;</span>
+        
         <span class="val">${p.Nganhnghe || "—"}</span>
       </div>
       <div class="popup-toe-bar">
