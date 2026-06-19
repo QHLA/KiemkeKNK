@@ -378,15 +378,71 @@ window.toggleLayer = function (name) {
   }
 };
 
-// ── LEGEND CLICK → FILTER ─────────────────────────────────────────────────────
-document.querySelectorAll(".legend-item[data-nganh]").forEach((el) => {
-  el.addEventListener("click", function () {
-    const n = this.dataset.nganh;
-    // sync với chips
-    document.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
-    const chip = document.querySelector(`.chip[data-nganh="${n}"]`);
-    if (chip) chip.classList.add("active");
-    activeNganh = n;
-    applyFilter();
+// ── IN BẢN ĐỒ ─────────────────────────────────────────────────────────────────
+let printHiddenIds = [];
+let printOnlySelected = false;
+
+function preparePrint() {
+  // Thay vì check document.getElementById("print-only-selected").checked
+  // Chúng ta mặc định logic: nếu có activeId thì chỉ in cơ sở đó, nếu không thì in tất cả
+  printOnlySelected = (activeId !== null && markerMap[activeId]); 
+  printHiddenIds = [];
+
+  if (printOnlySelected) {
+    Object.keys(markerMap).forEach((id) => {
+      if (String(id) !== String(activeId)) {
+        markerGroup.removeLayer(markerMap[id]);
+        printHiddenIds.push(id);
+      }
+    });
+  } else {
+    map.closePopup();
+  }
+
+  const sub = document.getElementById("print-title-sub");
+  if (printOnlySelected) {
+    const feat = allFeatures.find((f) => String(f.properties.STT) === String(activeId));
+    sub.textContent = feat ? feat.properties.Name || "" : "";
+  } else {
+    sub.textContent = `Tổng số cơ sở: ${filteredFeatures.length}`;
+  }
+}
+
+function restoreAfterPrint() {
+  document.body.classList.remove("printing");
+  if (printHiddenIds.length) {
+    printHiddenIds.forEach((id) => {
+      if (markerMap[id]) markerGroup.addLayer(markerMap[id]);
+    });
+    printHiddenIds = [];
+  }
+  map.invalidateSize();
+}
+
+document.getElementById("btn-print").addEventListener("click", function () {
+  preparePrint();
+
+  // 1) Bật class "printing" → #map đổi kích thước thật trên DOM (chưa in)
+  document.body.classList.add("printing");
+
+  // 2) Đợi 1 nhịp để trình duyệt reflow xong rồi mới báo Leaflet tính lại pixel
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      map.invalidateSize({ animate: false });
+
+      if (printOnlySelected && activeId !== null && markerMap[activeId]) {
+        map.setView(markerMap[activeId].getLatLng(), Math.max(map.getZoom(), 14), {
+          animate: false,
+        });
+        markerMap[activeId].openPopup();
+      }
+
+      // 3) Đợi tile bản đồ load xong rồi mới mở hộp thoại in
+      setTimeout(() => {
+        window.print();
+      }, 400);
+    }, 60);
   });
 });
+
+window.addEventListener("afterprint", restoreAfterPrint);

@@ -299,6 +299,7 @@ body {
   color: var(--text-sub);
   cursor: pointer;
   transition: all var(--transition);
+  -webkit-user-select: none;
   user-select: none;
 }
 .chip:hover { border-color: var(--accent-blue); color: var(--text-main); }
@@ -548,4 +549,86 @@ body {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/* ── PANEL IN BẢN ĐỒ ─────────────────────────────── */
+#print-panel { padding-top: 12px; padding-bottom: 14px; }
+
+.btn-print-map {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+  color: #fff;
+  border: none;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--transition);
+}
+.btn-print-map:hover { opacity: 0.88; }
+
+/* Tiêu đề chỉ hiện khi in, ẩn trên màn hình */
+#print-title { display: none; }
+
+/* ── CHẾ ĐỘ IN: CHỈ IN PHẦN BẢN ĐỒ, KHỔ A4 NGANG ─── */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+  html, body {
+    background: #fff !important;
+  }
+}
+
+/* Lớp "printing" được JS bật TRƯỚC khi gọi window.print(),
+   để Leaflet tính lại kích thước pixel đúng lúc rồi mới in. */
+body.printing #header,
+body.printing #sidebar,
+body.printing .leaflet-control-zoom,
+body.printing .leaflet-control-layers,
+body.printing .leaflet-control-attribution {
+  display: none !important;
+}
+
+body.printing html,
+body.printing body {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+body.printing #main {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: visible !important;
+}
+
+body.printing #print-title {
+  display: block !important;
+  order: -1;
+  text-align: center;
+  margin-bottom: 4mm;
+}
+.print-title-main {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+}
+.print-title-sub {
+  font-size: 11px;
+  color: #444;
+  margin-top: 2px;
+}
+
+body.printing #map {
+  order: 2;
+  position: relative !important;
+  width: 277mm !important;
+  height: 180mm !important;
+  box-shadow: none !important;
 }
