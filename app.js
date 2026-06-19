@@ -15,7 +15,7 @@ const TOE_MAX_DISPLAY = 50000; // để tính % thanh bar (clip outlier hàng kh
 // ── KHỞI TẠO BẢN ĐỒ ───────────────────────────────────────────────
 const map = L.map("map", {
   center: [21.02, 105.85],
-  zoom: 9,
+  zoom: 10,
   zoomControl: false,
 
   minZoom: 9,
