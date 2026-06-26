@@ -204,7 +204,7 @@ function buildPopup(feat) {
       </div>
       <div class="popup-toe-bar">
         <div class="popup-toe-label">
-          Tiêu thụ năng lượng (TOE)
+          Tiêu thụ năng lượng
           <span>${toe.toLocaleString("vi-VN")} TOE</span>
         </div>
         <div class="toe-track">
