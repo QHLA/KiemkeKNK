@@ -205,7 +205,7 @@ function buildPopup(feat) {
       <div class="popup-toe-bar">
         <div class="popup-toe-label">
           Tiêu thụ năng lượng
-          <span>${toe.toLocaleString("vi-VN")} TOE</span>
+          <span>${toe.toLocaleString("vi-VN")} tCO₂e</span>
         </div>
         <div class="toe-track">
           <div class="toe-fill" style="width:${toePct}%;background:linear-gradient(90deg,${cfg.mau}aa,${cfg.mau})"></div>
@@ -263,8 +263,8 @@ function renderList(features) {
       const cfg = NGANH_CFG[p.Nganh] || { mau: "#6b7280", icon: "🏢" };
       const toe = p.TieuthuTOE
         ? (p.TieuthuTOE >= 1000
-            ? (p.TieuthuTOE / 1000).toFixed(0) + "k TOE"
-            : p.TieuthuTOE + " TOE")
+            ? (p.TieuthuTOE).toFixed(0) + " tCO₂e"
+            : p.TieuthuTOE + "tCO₂e")
         : "";
       return `
         <div class="point-card" id="pc-${p.STT}" onclick="focusPoint(${p.STT})">
@@ -325,7 +325,7 @@ function renderStats(features) {
     0
   );
   document.getElementById("stat-toe").textContent =
-    (totalTOE / 1000).toFixed(0) + "k";
+    (totalTOE / 1000).toFixed(0);
 }
 
 // ── TÌM KIẾM ─────────────────────────────────────────────────────────────────
